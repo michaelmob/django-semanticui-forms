@@ -1,0 +1,33 @@
+<!DOCTYPE html>{% load static %}
+<html>
+<head>
+	<title>Semantic UI Forms for Django</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
+	<link rel="stylesheet" href="{% static 'calendar.css' %}">
+	</head>
+<body>
+	<nav class="ui top menu">
+		<div class="header item">Semantic UI Forms for Django</div>
+		<a href="{% url 'form' %}" class="item">Form</a>
+		<a href="{% url 'modelform' %}" class="item">Model Form</a>
+		<a href="{% url 'manyfieldsform' %}" class="item">Many Fields Form</a>
+	</nav>
+
+	<main class="ui page container">
+		{% block content %}
+			Insert content here!
+		{% endblock %}
+	</main>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script>
+	<script src="{% static 'calendar.js' %}"></script>
+	<script>
+		$(".ui.dropdown").dropdown();
+		$(".ui.form").form();
+		$(".ui.date.calendar").calendar({ type: "date" });
+		$(".ui.datetime.calendar").calendar({ type: "datetime" });
+		$(".ui.time.calendar").calendar({ type: "time" });
+	</script>
+</body>
+</html>
