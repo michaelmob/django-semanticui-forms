@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
 	name="django-semanticui-forms",
-	version=str("1"),
+	version=str("1.1"),
 	description="django-semanticui-forms",
 	author="Michael Tark",
 	author_email="theTarkus@users.noreply.github.com",

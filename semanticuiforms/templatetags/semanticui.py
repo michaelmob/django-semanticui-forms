@@ -5,7 +5,8 @@ from django.utils.safestring import mark_safe
 from ..wrappers import (
 	FIELD_WRAPPER, ERROR_WRAPPER, INPUT_WRAPPER, LABEL_TEMPLATE, ICON_TEMPLATE
 )
-from ..fields import FIELDS, valid_padding
+from ..utils import valid_padding
+from ..fields import FIELDS
 
 register = template.Library()
 
@@ -48,7 +49,7 @@ def render_field(field, **kwargs):
 	# Label tag
 	if field.label and not kwargs.get("_no_label"):
 		values["label"] += format_html(
-			LABEL_TEMPLATE, field.html_name, field.label
+			LABEL_TEMPLATE, field.html_name, mark_safe(field.label)
 		)
 
 	# Required class on field wrapper

@@ -26,7 +26,9 @@ def render_booleanfield(field, attrs):
 	return CHECKBOX_WRAPPER % {
 		"style": valid_padding(attrs.get("_style", "")),
 		"field": field,
-		"label": format_html(LABEL_TEMPLATE, field.html_name, field.label)
+		"label": format_html(
+			LABEL_TEMPLATE, field.html_name, mark_safe(field.label)
+		)
 	}
 
 
