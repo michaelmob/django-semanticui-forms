@@ -10,18 +10,24 @@ from .utils import valid_padding, remove_blank_choice
 
 
 def render_charfield(field, attrs):
-	""" Render a CharField; the most generic field """
+	"""
+	Render the generic CharField.
+	"""
 	return field
 
 
 def render_nullbooleanfield(field, attrs):
-	""" Render NullBooleanField as dropdown ("Unknown", "Yes", "No") """
+	"""
+	Render NullBooleanField as dropdown. ("Unknown", "Yes", "No")
+	"""
 	field.field.widget.attrs["class"] = "ui dropdown"
 	return field
 
 
 def render_booleanfield(field, attrs):
-	""" Render BooleanField with label next to instead of above """
+	"""
+	Render BooleanField with label next to instead of above.
+	"""
 	attrs["_no_label"] = 1  # No normal label for booleanfields
 	return CHECKBOX_WRAPPER % {
 		"style": valid_padding(attrs.get("_style", "")),
@@ -33,8 +39,10 @@ def render_booleanfield(field, attrs):
 
 
 def render_choicefield(field, attrs, choices=None):
-	""" Render ChoiceField as 'div' dropdown rather than select for
-			more customization """
+	"""
+	Render ChoiceField as 'div' dropdown rather than select for more
+	customization.
+	"""
 	# Allow custom choice list, but if no custom choice list then wrap all
 	# choices into the `CHOICE_TEMPLATE`
 	if not choices:
@@ -55,8 +63,10 @@ def render_choicefield(field, attrs, choices=None):
 
 
 def render_iconchoicefield(field, attrs):
-	""" Render a ChoiceField with icon support where the value is split by a pipe
-			(|), first element being the value, last element is the icon """
+	"""
+	Render a ChoiceField with icon support; where the value is split by a pipe
+	(|): first element being the value, last element is the icon.
+	"""
 	choices = ""
 
 	# Loop over every choice to manipulate
@@ -78,7 +88,9 @@ def render_iconchoicefield(field, attrs):
 
 
 def render_countryfield(field, attrs):
-	""" Custom ChoiceField specific for CountryFields """
+	"""
+	Render a custom ChoiceField specific for CountryFields.
+	"""
 	choices = ((k, k.lower(), v)
 		for k, v in remove_blank_choice(field.field._choices))
 
@@ -89,13 +101,17 @@ def render_countryfield(field, attrs):
 
 
 def render_multiplechoicefield(field, attrs):
-	""" MultipleChoiceField only requires the multiple class to be added """
+	"""
+	MultipleChoiceField only requires the multiple class to be added.
+	"""
 	field.field.widget.attrs["class"] = "ui multiple dropdown"
 	return field
 
 
 def render_datefield(field, attrs, style="date"):
-	""" DateField that uses CALENDAR_WRAPPER """
+	"""
+	DateField that uses CALENDAR_WRAPPER.
+	"""
 	return CALENDAR_WRAPPER % {
 		"field": field,
 		"style": valid_padding(style),
@@ -105,12 +121,16 @@ def render_datefield(field, attrs, style="date"):
 
 
 def render_timefield(field, attrs):
-	""" DateField with 'time' style """
+	"""
+	DateField with 'time' style.
+	"""
 	return render_datefield(field, attrs, "time")
 
 
 def render_datetimefield(field, attrs):
-	""" DateField with 'datetime' style """
+	"""
+	DateField with 'datetime' style.
+	"""
 	return render_datefield(field, attrs, "datetime")
 
 

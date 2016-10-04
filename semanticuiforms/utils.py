@@ -2,7 +2,8 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 
 
 def remove_blank_choice(choices):
-	"""Remove blank choice from choices for a ChoiceField
+	"""
+	Remove blank choice from choices for a ChoiceField
 
 	Args:
 		choices (tuple): Tuple of choices; ex: (("key", "value"),)
@@ -18,7 +19,8 @@ def remove_blank_choice(choices):
 
 
 def valid_padding(value):
-	"""Add one space padding around value if value is valid
+	"""
+	Add one space padding around value if value is valid
 
 	Args:
 		value (string): Value
