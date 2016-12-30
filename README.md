@@ -3,7 +3,10 @@ Effortlessly style all of your Django forms and form fields with Semantic UI wra
 
 
 #### Starting Off
-1. Install this repository with Git
+1. Install this repository with pip.  
+```
+pip install django-semanticui-forms
+```
 2. Add `semanticuiforms` to your `INSTALLED_APPS`.
 3. Load the templatetags into your template `{% load semanticui %}`
 
