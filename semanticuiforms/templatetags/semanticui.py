@@ -85,4 +85,6 @@ def render_form(formset):
 	Returns:
 	    string: HTML of Django Form fields with Semantic UI wrappers
 	"""
-	return mark_safe("".join([render_field(field) for field in formset]))
+	return mark_safe("".join([
+		render_field(field) for field in formset
+	]))

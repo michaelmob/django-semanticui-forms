@@ -2,10 +2,7 @@ from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 from django.forms.utils import flatatt
 
-from .wrappers import (
-	CHECKBOX_WRAPPER, DROPDOWN_WRAPPER, LABEL_TEMPLATE, CHOICE_TEMPLATE,
-	COUNTRY_TEMPLATE, CALENDAR_WRAPPER, ICON_TEMPLATE, ICON_CHOICE_TEMPLATE
-)
+from . import wrappers
 from .utils import valid_padding, remove_blank_choice
 
 
@@ -29,11 +26,11 @@ def render_booleanfield(field, attrs):
 	Render BooleanField with label next to instead of above.
 	"""
 	attrs["_no_label"] = 1  # No normal label for booleanfields
-	return CHECKBOX_WRAPPER % {
+	return wrappers.CHECKBOX_WRAPPER % {
 		"style": valid_padding(attrs.get("_style", "")),
 		"field": field,
 		"label": format_html(
-			LABEL_TEMPLATE, field.html_name, mark_safe(field.label)
+			wrappers.LABEL_TEMPLATE, field.html_name, mark_safe(field.label)
 		)
 	}
 
@@ -44,16 +41,16 @@ def render_choicefield(field, attrs, choices=None):
 	customization.
 	"""
 	# Allow custom choice list, but if no custom choice list then wrap all
-	# choices into the `CHOICE_TEMPLATE`
+	# choices into the `wrappers.CHOICE_TEMPLATE`
 	if not choices:
 		choices = format_html_join(
-			"", CHOICE_TEMPLATE,
+			"", wrappers.CHOICE_TEMPLATE,
 			remove_blank_choice(field.field._choices)
 		)
 
-	field.field.widget.attrs["value"] = field.value() or attrs.get("value")
+	field.field.widget.attrs["value"] = field.value() or attrs.get("value", "")
 
-	return DROPDOWN_WRAPPER % {
+	return wrappers.DROPDOWN_WRAPPER % {
 		"name": field.html_name,
 		"attrs": valid_padding(flatatt(field.field.widget.attrs)),
 		"placeholder": attrs.get("placeholder", "Select"),
@@ -77,9 +74,9 @@ def render_iconchoicefield(field, attrs):
 		# the "|" as the delimeter. First element is the value, the second
 		# is the icon to be used.
 		choices += format_html(
-			ICON_CHOICE_TEMPLATE,
+			wrappers.ICON_CHOICE_TEMPLATE,
 			choice[0],  # Key
-			mark_safe(ICON_TEMPLATE.format(value[-1])),  # Icon
+			mark_safe(wrappers.ICON_TEMPLATE.format(value[-1])),  # Icon
 			value[0]  # Value
 		)
 
@@ -96,7 +93,7 @@ def render_countryfield(field, attrs):
 
 	# Render a `ChoiceField` with all countries
 	return render_choicefield(
-		field, attrs, format_html_join("", COUNTRY_TEMPLATE, choices)
+		field, attrs, format_html_join("", wrappers.COUNTRY_TEMPLATE, choices)
 	)
 
 
@@ -110,13 +107,13 @@ def render_multiplechoicefield(field, attrs):
 
 def render_datefield(field, attrs, style="date"):
 	"""
-	DateField that uses CALENDAR_WRAPPER.
+	DateField that uses wrappers.CALENDAR_WRAPPER.
 	"""
-	return CALENDAR_WRAPPER % {
+	return wrappers.CALENDAR_WRAPPER % {
 		"field": field,
 		"style": valid_padding(style),
 		"align": valid_padding(attrs.get("_align", "")),
-		"icon": format_html(ICON_TEMPLATE, attrs.get("_icon")),
+		"icon": format_html(wrappers.ICON_TEMPLATE, attrs.get("_icon")),
 	}
 
 

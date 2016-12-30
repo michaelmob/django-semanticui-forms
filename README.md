@@ -55,7 +55,7 @@ private attribute. This is useful for things like using `CountryField` as it is
 not its own field type.
 
 
-#### Special ChoiceFields
+### Special ChoiceFields
 
 **CountryField**  
 `CountryField` from the `django-countries` package can be used to create a nice
@@ -77,4 +77,21 @@ choices = (
 
 # Template
 {% render_field my_form.gender _override='IconChoiceField' %}
+```
+
+
+### Testing
+1. Create a virtual environment.  
+```bash
+virtualenv -p $(which python3) .env
+```
+
+2. Source the activation script.  
+```bash
+source .env/bin/activate
+```
+
+3. Set the current directory to the `examples` app and run tests.
+```bash
+python manage.py test semanticuiforms 
 ```

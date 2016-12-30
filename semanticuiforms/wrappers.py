@@ -1,3 +1,4 @@
+# Wrappers
 FIELD_WRAPPER = (
 	"<div class=\"%(class)sfield\">%(label)s%(field)s%(errors)s</div>"
 )
@@ -33,6 +34,8 @@ CALENDAR_WRAPPER = (
 	"</div>"
 )
 
+
+# Templates
 LABEL_TEMPLATE = (
 	"<label for=\"id_{}\">{}</label>"
 )
@@ -41,16 +44,13 @@ ICON_TEMPLATE = (
 	"<i class=\"{} icon\"></i>"
 )
 
-
 CHOICE_TEMPLATE = (
 	"<div class=\"item\" data-value=\"{}\">{}</div>"
 )
 
-
 ICON_CHOICE_TEMPLATE = (
 	"<div class=\"item\" data-value=\"{}\">{}{}</div>"
 )
-
 
 COUNTRY_TEMPLATE = (
 	"<div class=\"item\" data-value=\"{}\">"

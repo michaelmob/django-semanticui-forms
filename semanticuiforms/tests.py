@@ -3,6 +3,7 @@ from django.test import TestCase
 from .templatetags.semanticui import render_field, render_form
 
 
+
 class CharFieldTestCase(TestCase):
 	"""
 	CharField is a generic field meaning that anything that passes on this
@@ -65,13 +66,15 @@ class CharFieldTestCase(TestCase):
 		"""
 		Test that icon is added to field.
 		"""
-		html = render_field(self.form["charfield1"],
-							_icon="star", _align="left")
+		html = render_field(
+			self.form["charfield1"], _icon="star", _align="left"
+		)
 
 		# Should contain star and left, for a star icon that is left aligned
 		# to the field
 		self.assertTrue("star" in html)
 		self.assertTrue("left" in html)
+
 
 
 class ChoiceFieldTestCase(TestCase):
@@ -94,6 +97,10 @@ class ChoiceFieldTestCase(TestCase):
 				("female", "Female|woman"),
 				("other", "Other|genderless")
 			))
+			choicefield3 = forms.ChoiceField(choices=(
+				("Yes", "Yes"),
+				("No", "No"),
+			))
 
 		self.form = Form()
 
@@ -109,6 +116,10 @@ class ChoiceFieldTestCase(TestCase):
 		# From custom arguments, "other" should be set as initial
 		html = render_field(self.form["choicefield1"], value="other")
 		self.assertTrue(" value=\"other\"" in html)
+
+		# No initial value, value should be an empty string
+		html = render_field(self.form["choicefield3"],)
+		self.assertTrue(" value=\"\"" in html)
 
 
 	def test_icon_dropdown(self):
