@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .forms import ManyFieldsExampleForm, ExampleModelForm, ExampleForm
 
+
 # Create your views here.
 def example_form(request):
 	form = ExampleForm(request.POST or None)
@@ -33,4 +34,3 @@ def example_manyfieldsform(request):
 	return render(request, "manyfieldsform.html", {
 		"form": form,
 	})
-

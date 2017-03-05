@@ -1,59 +1,85 @@
+from django.conf import settings
+
+
 # Wrappers
-FIELD_WRAPPER = (
-	"<div class=\"%(class)sfield\">%(label)s%(field)s%(errors)s</div>"
-)
+FIELD_WRAPPER = getattr(settings, "SUI_FIELD_WRAPPER", (
+	"<div class=\"%(class)sfield\">"
+		"%(label)s"
+		"%(field)s%(help)s"
+		"%(errors)s"
+	"</div>"
+))
 
-ERROR_WRAPPER = (
+ERROR_WRAPPER = getattr(settings, "SUI_ERROR_WRAPPER", (
 	"<div class=\"ui red pointing prompt label\">%(message)s</div>"
-)
+))
 
-INPUT_WRAPPER = (
+INPUT_WRAPPER = getattr(settings, "SUI_INPUT_WRAPPER", (
 	"<div class=\"ui%(style)sinput\">%(icon)s%(field)s</div>"
-)
+))
 
-CHECKBOX_WRAPPER = (
+CHECKBOX_WRAPPER = getattr(settings, "SUI_CHECKBOX_WRAPPER", (
 	"<div class=\"ui%(style)scheckbox\">%(field)s%(label)s</div>"
-)
+))
 
-DROPDOWN_WRAPPER = (
+DROPDOWN_WRAPPER = getattr(settings, "SUI_DROPDOWN_WRAPPER", (
 	"<div class=\"ui%(style)sselection dropdown\">"
-		"<input name=\"%(name)s\"%(attrs)stype=\"hidden\">"
+		"<input name=\"%(name)s\"%(attrs)stype=\"hidden\"></input>"
 		"<i class=\"dropdown icon\"></i>"
 		"<div class=\"default text\">%(placeholder)s</div>"
 		"<div class=\"menu\">"
 			"%(choices)s"
 		"</div>"
 	"</div>"
-)
+))
 
-CALENDAR_WRAPPER = (
+MULTIPLE_DROPDOWN_WRAPPER = getattr(settings, "SUI_MULTIPLE_DROPDOWN_WRAPPER", (
+	"<div class=\"ui%(style)smultiple selection dropdown\">"
+		"%(field)s"
+		"<i class=\"dropdown icon\"></i>"
+		"<div class=\"default text\">%(placeholder)s</div>"
+		"<div class=\"menu\">"
+			"%(choices)s"
+		"</div>"
+	"</div>"
+))
+
+CALENDAR_WRAPPER = getattr(settings, "SUI_CALENDAR_WRAPPER", (
 	"<div class=\"ui%(style)scalendar\">"
 		"<div class=\"ui input%(align)sicon\">"
 			"%(icon)s%(field)s"
 		"</div>"
 	"</div>"
-)
+))
 
 
 # Templates
-LABEL_TEMPLATE = (
+LABEL_TEMPLATE = getattr(settings, "SUI_LABEL_TEMPLATE", (
 	"<label for=\"id_{}\">{}</label>"
-)
+))
 
-ICON_TEMPLATE = (
+ICON_TEMPLATE = getattr(settings, "SUI_ICON_TEMPLATE", (
 	"<i class=\"{} icon\"></i>"
-)
+))
 
-CHOICE_TEMPLATE = (
+FLAG_TEMPLATE = getattr(settings, "SUI_FLAG_TEMPLATE", (
+	"<i class=\"{} flag\"></i>"
+))
+
+CHOICE_TEMPLATE = getattr(settings, "SUI_CHOICE_TEMPLATE", (
 	"<div class=\"item\" data-value=\"{}\">{}</div>"
-)
+))
 
-ICON_CHOICE_TEMPLATE = (
+ICON_CHOICE_TEMPLATE = getattr(settings, "SUI_ICON_CHOICE_TEMPLATE", (
 	"<div class=\"item\" data-value=\"{}\">{}{}</div>"
-)
+))
 
-COUNTRY_TEMPLATE = (
+COUNTRY_TEMPLATE = getattr(settings, "SUI_COUNTRY_TEMPLATE", (
 	"<div class=\"item\" data-value=\"{}\">"
-	"<i class=\"{} flag\"></i> {}"
+		"%s {}"
 	"</div>"
-)
+) % FLAG_TEMPLATE)
+
+HELP_TEMPLATE = getattr(settings, "SUI_HELP_TEMPLATE", (
+	"<div class=\"%s\">{}</div>"
+) % getattr(settings, "SUI_HELP_CLASS", "ui help"))

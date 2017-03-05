@@ -5,7 +5,7 @@
 <h1>Model Form</h1>
 <form class="ui form" method="POST">
 	{% csrf_token %}
-	{% render_field form.first_name _icon='book' _align='left' value='Jane' placeholder='Put your first name here' %}
+	{% render_field form.first_name _help=1 _icon='book' _align='left' value='Jane' placeholder='Put your first name here' %}
 	{% render_field form.last_name placeholder='Put your last name here' %}
 	{% render_field form.gender placeholder='Select Gender' value='female' %}
 	{% render_field form.age placeholder='21' %}

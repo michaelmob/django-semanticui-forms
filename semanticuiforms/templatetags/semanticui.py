@@ -2,9 +2,7 @@ from django import template
 from django.utils.html import format_html, escape
 from django.utils.safestring import mark_safe
 
-from ..wrappers import (
-	FIELD_WRAPPER, ERROR_WRAPPER, INPUT_WRAPPER, LABEL_TEMPLATE, ICON_TEMPLATE
-)
+from ..wrappers import *
 from ..utils import valid_padding
 from ..fields import FIELDS
 
@@ -41,9 +39,10 @@ def render_field(field, **kwargs):
 		"class": "",
 		"label": "",
 		"errors": "",
-		"field": FIELDS.get(
+		"help": "",
+		"field": str(FIELDS.get(
 			kwargs.get("_override", field.field.__class__.__name__), FIELDS["_"]
-		)(field, kwargs)
+		)(field, kwargs))
 	}
 
 	# Label tag
@@ -64,10 +63,15 @@ def render_field(field, **kwargs):
 		for error in field.errors:
 			values["errors"] += ERROR_WRAPPER % {"message": error}
 
+	# Add help_text to field's html
+	if field.help_text and kwargs.get("_help"):
+		values["help"] = HELP_TEMPLATE.format(field.help_text)
+
 	# Wrap field wrapper with input wrapper; unofficial calendar has quirks
 	if kwargs.get("_icon") and (not "Date" in field.field.__class__.__name__):
 		values["field"] = INPUT_WRAPPER % {
 			"field": values["field"],
+			"help": values["help"], 
 			"style": "%sicon " % escape(valid_padding(kwargs.get("_align", ""))),
 			"icon": format_html(ICON_TEMPLATE, kwargs.get("_icon")),
 		}
@@ -76,15 +80,22 @@ def render_field(field, **kwargs):
 
 
 @register.simple_tag()
-def render_form(formset):
+def render_form(formset, exclude=None, **kwargs):
 	"""Render an entire form with Semantic UI wrappers for each field
 	
 	Args:
 	    formset (formset): Django Form
+	    exclude (string): exclude fields by name, separated by commas
+	    kwargs (dict): other attributes will be passed to fields
 	
 	Returns:
 	    string: HTML of Django Form fields with Semantic UI wrappers
 	"""
+	if exclude:
+		exclude = exclude.split(",")
+		for field in exclude:
+			formset.fields.pop(field)
+
 	return mark_safe("".join([
-		render_field(field) for field in formset
+		render_field(field, **kwargs) for field in formset
 	]))

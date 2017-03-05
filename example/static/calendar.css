@@ -1,14 +1,12 @@
-/* SOURCE: https://github.com/mdehoog/Semantic-UI/blob/calendar-dist/dist/components/calendar.css
-
-
-████████╗██╗  ██╗███████╗███╗   ███╗███████╗███████╗
-╚══██╔══╝██║  ██║██╔════╝████╗ ████║██╔════╝██╔════╝
-   ██║   ███████║█████╗  ██╔████╔██║█████╗  ███████╗
-   ██║   ██╔══██║██╔══╝  ██║╚██╔╝██║██╔══╝  ╚════██║
-   ██║   ██║  ██║███████╗██║ ╚═╝ ██║███████╗███████║
-   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚══════╝╚══════╝
-
-*/
+/*!
+ * # Semantic UI 0.0.6 - Calendar
+ * http://github.com/semantic-org/semantic-ui/
+ *
+ *
+ * Released under the MIT license
+ * http://opensource.org/licenses/MIT
+ *
+ */
 
 
 /*******************************
@@ -17,7 +15,7 @@
 
 .ui.calendar .ui.popup {
   max-width: none;
-  padding: 0 !important;
+  padding: 0;
   border: none;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -32,6 +30,19 @@
 
 .ui.calendar .calendar:focus {
   outline: 0;
+}
+
+
+/*******************************
+            Grid
+*******************************/
+
+.ui.calendar .ui.popup .ui.grid {
+  display: block;
+  white-space: nowrap;
+}
+.ui.calendar .ui.popup .ui.grid > .column {
+  width: auto;
 }
 
 
@@ -128,4 +139,3 @@
 /*******************************
          Theme Overrides
 *******************************/
-

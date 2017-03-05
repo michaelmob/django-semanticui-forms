@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.forms.utils import flatatt
 
 from . import wrappers
-from .utils import valid_padding, remove_blank_choice
+from .utils import valid_padding, remove_blank_choice, get_choices
 
 
 def render_charfield(field, attrs):
@@ -43,10 +43,7 @@ def render_choicefield(field, attrs, choices=None):
 	# Allow custom choice list, but if no custom choice list then wrap all
 	# choices into the `wrappers.CHOICE_TEMPLATE`
 	if not choices:
-		choices = format_html_join(
-			"", wrappers.CHOICE_TEMPLATE,
-			remove_blank_choice(field.field._choices)
-		)
+		choices = format_html_join("", wrappers.CHOICE_TEMPLATE, get_choices(field))
 
 	field.field.widget.attrs["value"] = field.value() or attrs.get("value", "")
 
@@ -97,12 +94,18 @@ def render_countryfield(field, attrs):
 	)
 
 
-def render_multiplechoicefield(field, attrs):
+def render_multiplechoicefield(field, attrs, choices=None):
 	"""
-	MultipleChoiceField only requires the multiple class to be added.
+	MultipleChoiceField uses its own field, but also uses a queryset.
 	"""
-	field.field.widget.attrs["class"] = "ui multiple dropdown"
-	return field
+	choices = format_html_join("", wrappers.CHOICE_TEMPLATE, get_choices(field))
+	return wrappers.MULTIPLE_DROPDOWN_WRAPPER % {
+		"name": field.html_name,
+		"field": field,
+		"choices": choices,
+		"placeholder": attrs.get("placeholder", "Select"),
+		"style": valid_padding(attrs.get("_style", "")),
+	}
 
 
 def render_datefield(field, attrs, style="date"):
@@ -137,10 +140,12 @@ FIELDS = {
 	"TypedChoiceField": render_choicefield,
 	"LazyTypedChoiceField": render_choicefield,
 	"FilePathField": render_choicefield,
+	"ModelChoiceField": render_choicefield,
 
 	# Multi-choice Fields
 	"MultipleChoiceField": render_multiplechoicefield,
 	"TypedMultipleChoiceField": render_multiplechoicefield,
+	"ModelMultipleChoiceField": render_multiplechoicefield,
 
 	# Custom-choice fields
 	"CountryField": render_countryfield,
