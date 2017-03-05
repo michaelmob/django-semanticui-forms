@@ -54,7 +54,9 @@ can be set in the form class or as an argument like above.
 * `_no_label`: Do not show label
 * `_no_required`: Do not show required asterisk
 * `_no_errors`: Do not show inline errors
-* `_override`: Render as a different field type
+* `_inline`: Adds inline class to field
+* `_field_class`: Allows for custom field classes
+* `_override`: Render as a different input type
 * `_style`: Stylize specific fields (BoleanField, ChoiceField)
     * `BooleanField`: set to 'toggle' or 'slider'
     * `ChoiceField`: set to 'search' or 'multiple' and more
@@ -72,19 +74,19 @@ optionally `_align` to your arguments.
 
 #### Override to render as different field
 Overriding the function that renders the field is done using the `_override`
-attribute. This is useful for things like using `CountryField` as it is
+attribute. This is useful for things like using `CountrySelect` as it is
 not its own field type.
 
 
 ### Special ChoiceFields
 
-**CountryField**  
-`CountryField` from the `django-countries` package can be used to create a nice
+**CountrySelect**  
+`CountrySelect` from the `django-countries` package can be used to create a nice
 field that displays a list of countries alongside their flags, to access it you
-must set the `_override` attribute to `CountryField`.
+must set the `_override` attribute to `CountrySelect`.
 
 **Icon ChoiceField**  
-`IconChoiceField` can be used with overriding just like `CountryField`. This
+`IconSelect` can be used with overriding just like `CountrySelect`. This
 field is useful since icons can be placed next to the values in the field.
 
 ```python
@@ -97,7 +99,7 @@ choices = (
 )
 
 # Template
-{% render_field my_form.gender _override='IconChoiceField' %}
+{% render_field my_form.gender _override='IconSelect' %}
 ```
 
 

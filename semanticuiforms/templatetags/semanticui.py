@@ -25,6 +25,9 @@ def render_field(field, **kwargs):
 	except:
 		return
 
+	# Save old dict in variable before recreating a new one, deepcopy not needed
+	field_widget_attrs = field.field.widget.attrs
+
 	# Override kwargs (attrs) with widget's attrs
 	kwargs.update(field.field.widget.attrs)
 
@@ -41,15 +44,27 @@ def render_field(field, **kwargs):
 		"errors": "",
 		"help": "",
 		"field": str(FIELDS.get(
-			kwargs.get("_override", field.field.__class__.__name__), FIELDS["_"]
+			kwargs.get("_override", field.field.widget.__class__.__name__), FIELDS["_"]
 		)(field, kwargs))
 	}
+
+	# Return form field without wrapper
+	if kwargs.get("_no_wrapper"):
+		return values["field"]
 
 	# Label tag
 	if field.label and not kwargs.get("_no_label"):
 		values["label"] += format_html(
 			LABEL_TEMPLATE, field.html_name, mark_safe(field.label)
 		)
+
+	# Custom field classes on field wrapper
+	if kwargs.get("_field_class"):
+		values["class"] += escape(str(kwargs.get("_field_class"))) + " "
+
+	# Inline class on field wrapper
+	if kwargs.get("_inline"):
+		values["class"] += "inline "
 
 	# Required class on field wrapper
 	if field.field.required and not kwargs.get("_no_required"):
@@ -75,6 +90,9 @@ def render_field(field, **kwargs):
 			"style": "%sicon " % escape(valid_padding(kwargs.get("_align", ""))),
 			"icon": format_html(ICON_TEMPLATE, kwargs.get("_icon")),
 		}
+
+	# Restore widget attributes to widget
+	field.field.widget.attrs = field_widget_attrs
 
 	return mark_safe(FIELD_WRAPPER % values)
 

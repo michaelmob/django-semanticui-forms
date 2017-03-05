@@ -3,14 +3,14 @@ from .forms import ManyFieldsExampleForm, ExampleModelForm, ExampleForm
 
 
 # Create your views here.
-def example_form(request):
+def example_form(request, template="form.html"):
 	form = ExampleForm(request.POST or None)
 
 	if request.POST and form.is_valid():
 		pass # Do whatever
 
 	return render(request, "form.html", {
-		"form": form,
+		"form": form
 	})
 
 
@@ -21,7 +21,7 @@ def example_modelform(request):
 		pass # Do whatever
 
 	return render(request, "modelform.html", {
-		"form": form,
+		"form": form
 	})
 
 
@@ -32,5 +32,5 @@ def example_manyfieldsform(request):
 		pass # Do whatever
 
 	return render(request, "manyfieldsform.html", {
-		"form": form,
+		"form": form
 	})

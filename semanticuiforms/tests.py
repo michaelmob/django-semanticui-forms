@@ -127,5 +127,6 @@ class ChoiceFieldTestCase(TestCase):
 		Test that icons are next to values in dropdown.
 		"""
 		html = render_field(
-			self.form["choicefield2"], _override="IconChoiceField")
+			self.form["choicefield2"], _override="IconSelect"
+		)
 		self.assertTrue(" class=\"woman icon\"" in html)

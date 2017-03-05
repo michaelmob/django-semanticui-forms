@@ -13,6 +13,14 @@ def render_charfield(field, attrs):
 	return field
 
 
+def render_hiddenfield(field, attrs):
+	"""
+	Return input as a hidden field.
+	"""
+	attrs["_no_wrapper"] = 1
+	return field
+
+
 def render_nullbooleanfield(field, attrs):
 	"""
 	Render NullBooleanField as dropdown. ("Unknown", "Yes", "No")
@@ -26,6 +34,9 @@ def render_booleanfield(field, attrs):
 	Render BooleanField with label next to instead of above.
 	"""
 	attrs["_no_label"] = 1  # No normal label for booleanfields
+	attrs["_inline"] = 1  # Checkbox should be inline
+	field.field.widget.attrs["class"] = "hidden"  # Hidden field
+
 	return wrappers.CHECKBOX_WRAPPER % {
 		"style": valid_padding(attrs.get("_style", "")),
 		"field": field,
@@ -135,31 +146,28 @@ def render_datetimefield(field, attrs):
 
 
 FIELDS = {
-	# Choice Fields
-	"ChoiceField": render_choicefield,
-	"TypedChoiceField": render_choicefield,
-	"LazyTypedChoiceField": render_choicefield,
-	"FilePathField": render_choicefield,
-	"ModelChoiceField": render_choicefield,
+	# Default
+	"_": render_charfield,
 
-	# Multi-choice Fields
-	"MultipleChoiceField": render_multiplechoicefield,
-	"TypedMultipleChoiceField": render_multiplechoicefield,
-	"ModelMultipleChoiceField": render_multiplechoicefield,
+	# Character Fields
+	"TextInput": render_charfield,
 
-	# Custom-choice fields
-	"CountryField": render_countryfield,
-	"IconChoiceField": render_iconchoicefield,
+	# Hidden Fields
+	"HiddenInput": render_hiddenfield,
+	"MultipleHiddenInput": render_hiddenfield, 
 
 	# Boolean Fields
-	"NullBooleanField": render_nullbooleanfield,
-	"BooleanField": render_booleanfield,
+	"CheckboxInput": render_booleanfield,
+	"NullBooleanSelect": render_nullbooleanfield,
 
-	# Date/time pickers
-	"DateField": render_datefield,
-	"TimeField": render_timefield,
-	"DateTimeField": render_datetimefield,
+	# Choice Fields
+	"Select": render_choicefield,
+	"IconSelect": render_iconchoicefield,
+	"SelectMultiple": render_multiplechoicefield,
+	"CountrySelect": render_countryfield,
 
-	# Default
-	"_": render_charfield
+	# Date/Time
+	"TimeInput": render_timefield,
+	"DateInput": render_datefield,
+	"DateTimeInput": render_datetimefield,
 }

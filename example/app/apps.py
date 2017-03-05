@@ -8,6 +8,7 @@ class ExampleAppConfig(AppConfig):
 	"""
 	name = "app"
 
+
 	def ready(self):
 		"""
 		Create test friends for displaying.

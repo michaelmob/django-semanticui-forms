@@ -20,6 +20,8 @@ ICON_GENDERS = (
 
 
 class ManyFieldsExampleForm(forms.Form):
+	hiddeninput = forms.CharField(widget=forms.HiddenInput())
+	multiplehiddeninput = forms.MultipleChoiceField(widget=forms.MultipleHiddenInput, choices=CONTINENTS)
 	modelchoicefield = forms.ModelChoiceField(queryset=Friend.objects.all(), empty_label=None, to_field_name="first_name")
 	modelmultiplechoicefield = forms.ModelMultipleChoiceField(queryset=Friend.objects.all())
 	booleanfield = forms.BooleanField(label="BooleanField")
@@ -54,8 +56,13 @@ class ExampleForm(forms.Form):
 	continent = forms.ChoiceField(choices=CONTINENTS)
 	agree = forms.BooleanField(label="Agree to do whatever")
 	gender = forms.ChoiceField(choices=ICON_GENDERS,
-		widget=forms.Select(attrs={ "_override": "IconChoiceField" })
+		widget=forms.Select(attrs={"_override": "IconSelect"})
 	)
+
+
+	def clean(self):
+		self.add_error("agree", "Error!")
+		self.add_error("first_name", "Houston, we've had a problem.")
 
 
 

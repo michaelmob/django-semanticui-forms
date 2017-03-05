@@ -5,8 +5,9 @@
 <h1>Many Fields Form</h1>
 <form class="ui form" method="POST">
 	{% csrf_token %}
+	{% render_field form.hiddeninput %}
 	{% render_field form.modelmultiplechoicefield placeholder='Select Some!' %}
-	{% render_form form exclude='modelmultiplechoicefield' %}
+	{% render_form form exclude='modelmultiplechoicefield,hiddeninput' %}
 	<button class="ui submit button">Submit</button>
 </form>
 {% endblock %}
