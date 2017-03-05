@@ -5,8 +5,9 @@ from django.conf import settings
 FIELD_WRAPPER = getattr(settings, "SUI_FIELD_WRAPPER", (
 	"<div class=\"%(class)sfield\">"
 		"%(label)s"
-		"%(field)s%(help)s"
+		"%(field)s"
 		"%(errors)s"
+		"%(help)s"
 	"</div>"
 ))
 
