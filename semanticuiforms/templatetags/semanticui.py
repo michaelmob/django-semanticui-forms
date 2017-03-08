@@ -38,14 +38,13 @@ def render_field(field, **kwargs):
 	}
 
 	# Values for field wrapper
+	input_ = kwargs.get("_override", field.field.widget.__class__.__name__)
 	values = {
 		"class": "",
 		"label": "",
 		"errors": "",
 		"help": "",
-		"field": str(FIELDS.get(
-			kwargs.get("_override", field.field.widget.__class__.__name__), FIELDS["_"]
-		)(field, kwargs))
+		"field": str(FIELDS.get(input_, FIELDS["_"])(field, kwargs))
 	}
 
 	# Return form field without wrapper

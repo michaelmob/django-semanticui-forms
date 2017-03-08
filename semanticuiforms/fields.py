@@ -1,9 +1,9 @@
-from django.utils.html import format_html, format_html_join
+from django.utils.html import format_html, format_html_join, escape
 from django.utils.safestring import mark_safe
 from django.forms.utils import flatatt
 
 from . import wrappers
-from .utils import valid_padding, remove_blank_choice, get_choices
+from .utils import valid_padding, get_choices
 
 
 def render_charfield(field, attrs):
@@ -17,7 +17,8 @@ def render_hiddenfield(field, attrs):
 	"""
 	Return input as a hidden field.
 	"""
-	attrs["_no_wrapper"] = 1
+	if not "_no_wrapper" in attrs:
+		attrs["_no_wrapper"] = 1
 	return field
 
 
@@ -33,8 +34,8 @@ def render_booleanfield(field, attrs):
 	"""
 	Render BooleanField with label next to instead of above.
 	"""
-	attrs["_no_label"] = 1  # No normal label for booleanfields
-	attrs["_inline"] = 1  # Checkbox should be inline
+	attrs.setdefault("_no_label", True)  # No normal label for booleanfields
+	attrs.setdefault("_inline", True)  # Checkbox should be inline
 	field.field.widget.attrs["class"] = "hidden"  # Hidden field
 
 	return wrappers.CHECKBOX_WRAPPER % {
@@ -75,7 +76,7 @@ def render_iconchoicefield(field, attrs):
 	choices = ""
 
 	# Loop over every choice to manipulate
-	for choice in remove_blank_choice(field.field._choices):
+	for choice in field.field._choices:
 		value = choice[1].split("|")  # Value|Icon
 
 		# Each choice is formatted with the choice value being split with
@@ -97,7 +98,7 @@ def render_countryfield(field, attrs):
 	Render a custom ChoiceField specific for CountryFields.
 	"""
 	choices = ((k, k.lower(), v)
-		for k, v in remove_blank_choice(field.field._choices))
+		for k, v in field.field._choices[1:])
 
 	# Render a `ChoiceField` with all countries
 	return render_choicefield(
@@ -145,8 +146,26 @@ def render_datetimefield(field, attrs):
 	return render_datefield(field, attrs, "datetime")
 
 
+def render_filefield(field, attrs):
+	"""
+	Render a typical File Field.
+	"""
+	field.field.widget.attrs["style"] = "display:none"
+
+	if not "_no_label" in attrs:
+		attrs["_no_label"] = True
+
+	return wrappers.FILE_WRAPPER % {
+		"field": field,
+		"id": "id_" + field.name,
+		"style": valid_padding(attrs.get("_style", "")),
+		"text": escape(attrs.get("_text", "Select File")),
+		"icon": format_html(wrappers.ICON_TEMPLATE, attrs.get("_icon", "file outline"))
+	}
+
+
 FIELDS = {
-	# Default
+	# Generic Fields
 	"_": render_charfield,
 
 	# Character Fields
@@ -166,8 +185,11 @@ FIELDS = {
 	"SelectMultiple": render_multiplechoicefield,
 	"CountrySelect": render_countryfield,
 
-	# Date/Time
+	# Date/Time Fields
 	"TimeInput": render_timefield,
 	"DateInput": render_datefield,
 	"DateTimeInput": render_datetimefield,
+
+	# File Fields
+	"FileInput": render_filefield,
 }

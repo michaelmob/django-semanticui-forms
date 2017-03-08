@@ -22,7 +22,7 @@ ICON_GENDERS = (
 class ManyFieldsExampleForm(forms.Form):
 	hiddeninput = forms.CharField(widget=forms.HiddenInput())
 	multiplehiddeninput = forms.MultipleChoiceField(widget=forms.MultipleHiddenInput, choices=CONTINENTS)
-	modelchoicefield = forms.ModelChoiceField(queryset=Friend.objects.all(), empty_label=None, to_field_name="first_name")
+	modelchoicefield = forms.ModelChoiceField(queryset=Friend.objects.all(), empty_label="Empty Space", to_field_name="first_name")
 	modelmultiplechoicefield = forms.ModelMultipleChoiceField(queryset=Friend.objects.all())
 	booleanfield = forms.BooleanField(label="BooleanField")
 	charfield = forms.CharField(label="CharField")
@@ -54,6 +54,7 @@ class ExampleForm(forms.Form):
 	last_name = forms.CharField(max_length=100)
 	billing_address = forms.CharField(max_length=100)
 	continent = forms.ChoiceField(choices=CONTINENTS)
+	file = forms.FileField(label="Upload Your File", widget=forms.FileInput)
 	agree = forms.BooleanField(label="Agree to do whatever")
 	gender = forms.ChoiceField(choices=ICON_GENDERS,
 		widget=forms.Select(attrs={"_override": "IconSelect"})

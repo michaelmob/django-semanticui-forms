@@ -53,6 +53,13 @@ CALENDAR_WRAPPER = getattr(settings, "SUI_CALENDAR_WRAPPER", (
 	"</div>"
 ))
 
+FILE_WRAPPER = getattr(settings, "SUI_FILE_WRAPPER", (
+	"%(field)s"
+	"<label for=\"%(id)s\" class=\"ui%(style)sbutton\">"
+		"%(icon)s<span>%(text)s</span>"
+	"</label>"
+))
+
 
 # Templates
 LABEL_TEMPLATE = getattr(settings, "SUI_LABEL_TEMPLATE", (
