@@ -22,7 +22,7 @@ Form attributes given to the template tag that are not specified for internal
 use are passed onto each field.
 
 It is possible to exclude fields from `render_form` using the `exclude` parameter.
-Fields to be excluded should be separated by comments.  
+Fields to be excluded should be separated by commas.  
 ```html
 {% render_form my_form exclude='field1,field3' %}
 ```  
