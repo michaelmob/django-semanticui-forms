@@ -33,7 +33,7 @@ to each field in that form.
 For good use: `{% render_form my_form _help=1 %}` will display the field's
 help_text on all fields.  
 
-#### Field Attributes
+ #### Field Attributes
 Any attribute can be assigned to most fields. This can be done by either
 assigning within the form class or on-the-fly in the template.
 
