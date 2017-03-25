@@ -111,15 +111,15 @@ class ChoiceFieldTestCase(TestCase):
 		"""
 		# From widget attributes, "female" should be set as initial
 		html = render_field(self.form["choicefield2"])
-		self.assertTrue(" value=\"female\"" in html)
+		self.assertTrue("value=\"female\"" in html)
 
 		# From custom arguments, "other" should be set as initial
 		html = render_field(self.form["choicefield1"], value="other")
-		self.assertTrue(" value=\"other\"" in html)
+		self.assertTrue("value=\"other\"" in html)
 
 		# No initial value, value should be an empty string
 		html = render_field(self.form["choicefield3"],)
-		self.assertTrue(" value=\"\"" in html)
+		self.assertTrue("<div class=\"default text\">Select</div>" in html)
 
 
 	def test_icon_dropdown(self):

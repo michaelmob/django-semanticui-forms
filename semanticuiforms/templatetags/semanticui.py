@@ -3,10 +3,132 @@ from django.utils.html import format_html, escape
 from django.utils.safestring import mark_safe
 
 from ..wrappers import *
-from ..utils import valid_padding
+from ..utils import pad
 from ..fields import FIELDS
 
 register = template.Library()
+
+
+
+class Field():
+	"""
+	Semantic UI Form Field.
+	"""
+	def __init__(self, field, **kwargs):
+		"""Initializer for Field class.
+		
+		Args:
+			field (BoundField): Form field
+			**kwargs (dict): Field attributes
+		"""
+		# Kwargs will always be additional attributes
+		self.attrs = kwargs
+		self.attrs.update(field.field.widget.attrs)
+
+		# Field
+		self.field = field
+		self.widget = field.field.widget
+
+		# Defaults
+		self.values = {"class": [], "label": "", "help": "", "errors": ""}
+
+
+	def set_input(self):
+		"""Returns form input field of Field.
+		"""
+		name = self.attrs.get("_override", self.widget.__class__.__name__)
+		self.values["field"] = FIELDS.get(name, FIELDS.get(None))(self.field, self.attrs)
+
+
+	def set_label(self):
+		"""Set label markup.
+		"""
+		if not self.field.label or self.attrs.get("_no_label"):
+			return
+
+		self.values["label"] = format_html(
+			LABEL_TEMPLATE, self.field.html_name, mark_safe(self.field.label)
+		)
+
+
+	def set_help(self):
+		"""Set help text markup.
+		"""
+		if not self.field.help_text or self.attrs.get("_help"):
+			return
+
+		self.values["help"] = HELP_TEMPLATE.format(self.field.help_text)
+
+
+	def set_errors(self):
+		"""Set errors markup.
+		"""
+		if not self.field.errors or self.attrs.get("_no_errors"):
+			return
+		
+		self.values["class"].append("error")
+
+		for error in self.field.errors:
+			self.values["errors"] += ERROR_WRAPPER % {"message": error}
+
+
+	def set_icon(self):
+		"""Wrap current field with icon wrapper.
+		This setter must be the last setter called.
+		"""
+		if not self.attrs.get("_icon"):
+			return
+
+		if "Date" in self.field.field.__class__.__name__:
+			return
+
+		self.values["field"] = INPUT_WRAPPER % {
+			"field": self.values["field"],
+			"help": self.values["help"], 
+			"style": "%sicon " % escape(pad(self.attrs.get("_align", ""))),
+			"icon": format_html(ICON_TEMPLATE, self.attrs.get("_icon")),
+		}
+
+
+	def set_classes(self):
+		"""Set field properties and custom classes.
+		"""
+		# Custom field classes on field wrapper
+		if self.attrs.get("_field_class"):
+			self.values["class"].append(escape(self.attrs.get("_field_class")))
+
+		# Inline class
+		if self.attrs.get("_inline"):
+			self.values["class"].append("inline")
+
+		# Disabled class
+		if self.field.field.disabled:
+			self.values["class"].append("disabled")
+
+		# Required class
+		if self.field.field.required and not self.attrs.get("_no_required"):
+			self.values["class"].append("required")
+
+
+	def render(self):
+		"""Render field as HTML.
+		"""
+		self.widget.attrs = {
+			k: v for k, v in self.attrs.items() if k[0] != "_"
+		}
+		self.set_input()
+
+		if not self.attrs.get("_no_wrapper"):
+			self.set_label()
+			self.set_errors()
+			self.set_classes()
+			self.set_icon()  # Must be the bottom-most setter
+
+		self.values["class"] = pad(" ".join(self.values["class"]))
+		result = mark_safe(FIELD_WRAPPER % self.values)
+		self.widget.attrs = self.attrs  # Re-assign variables
+		return result
+
 
 
 @register.simple_tag
@@ -20,80 +142,7 @@ def render_field(field, **kwargs):
 	Returns:
 		string: HTML code for field
 	"""
-	try:  # Make sure field is valid
-		field.field
-	except:
-		return
-
-	# Save old dict in variable before recreating a new one, deepcopy not needed
-	field_widget_attrs = field.field.widget.attrs
-
-	# Override kwargs (attrs) with widget's attrs
-	kwargs.update(field.field.widget.attrs)
-
-	# Recreate widget attrs to include the ones from the template
-	# Note: Widget attrs defined in the form class have priority
-	field.field.widget.attrs = {
-		k: v for k, v in kwargs.items() if k[:1] != "_"
-	}
-
-	# Values for field wrapper
-	input_ = kwargs.get("_override", field.field.widget.__class__.__name__)
-	values = {
-		"class": "",
-		"label": "",
-		"errors": "",
-		"help": "",
-		"field": str(FIELDS.get(input_, FIELDS["_"])(field, kwargs))
-	}
-
-	# Return form field without wrapper
-	if kwargs.get("_no_wrapper"):
-		return values["field"]
-
-	# Label tag
-	if field.label and not kwargs.get("_no_label"):
-		values["label"] += format_html(
-			LABEL_TEMPLATE, field.html_name, mark_safe(field.label)
-		)
-
-	# Custom field classes on field wrapper
-	if kwargs.get("_field_class"):
-		values["class"] += escape(str(kwargs.get("_field_class"))) + " "
-
-	# Inline class on field wrapper
-	if kwargs.get("_inline"):
-		values["class"] += "inline "
-
-	# Required class on field wrapper
-	if field.field.required and not kwargs.get("_no_required"):
-		values["class"] += "required "
-
-	# Error class on field wrapper
-	if field.errors and not kwargs.get("_no_errors"):
-		values["class"] += "error "
-
-		# Add field errors to `error` element in `values`
-		for error in field.errors:
-			values["errors"] += ERROR_WRAPPER % {"message": error}
-
-	# Add help_text to field's html
-	if field.help_text and kwargs.get("_help"):
-		values["help"] = HELP_TEMPLATE.format(field.help_text)
-
-	# Wrap field wrapper with input wrapper; unofficial calendar has quirks
-	if kwargs.get("_icon") and (not "Date" in field.field.__class__.__name__):
-		values["field"] = INPUT_WRAPPER % {
-			"field": values["field"],
-			"help": values["help"], 
-			"style": "%sicon " % escape(valid_padding(kwargs.get("_align", ""))),
-			"icon": format_html(ICON_TEMPLATE, kwargs.get("_icon")),
-		}
-
-	# Restore widget attributes to widget
-	field.field.widget.attrs = field_widget_attrs
-
-	return mark_safe(FIELD_WRAPPER % values)
+	return Field(field, **kwargs).render()
 
 
 @register.simple_tag()
@@ -101,12 +150,12 @@ def render_form(formset, exclude=None, **kwargs):
 	"""Render an entire form with Semantic UI wrappers for each field
 	
 	Args:
-	    formset (formset): Django Form
-	    exclude (string): exclude fields by name, separated by commas
-	    kwargs (dict): other attributes will be passed to fields
+		formset (formset): Django Form
+		exclude (string): exclude fields by name, separated by commas
+		kwargs (dict): other attributes will be passed to fields
 	
 	Returns:
-	    string: HTML of Django Form fields with Semantic UI wrappers
+		string: HTML of Django Form fields with Semantic UI wrappers
 	"""
 	if exclude:
 		exclude = exclude.split(",")

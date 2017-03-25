@@ -114,13 +114,18 @@ virtualenv -p $(which python3) .env
 source .env/bin/activate
 ```
 
-3. Make and run migrations for testing purposes.
+3. Set current directory to `examples` app and then install Python requirements.
+```bash
+pip install -r requirements.txt
+```
+
+4. Make and run migrations for testing purposes.
 ```bash
 python manage.py makemigrations 
 python manage.py migrate 
 ```
 
-4. Run tests from `examples` app.
+5. Run tests.
 ```bash
 python manage.py test semanticuiforms 
 ```

@@ -26,7 +26,7 @@ class ManyFieldsExampleForm(forms.Form):
 	modelmultiplechoicefield = forms.ModelMultipleChoiceField(queryset=Friend.objects.all())
 	booleanfield = forms.BooleanField(label="BooleanField")
 	charfield = forms.CharField(label="CharField")
-	choicefield = forms.ChoiceField(label="ChoiceField")
+	choicefield = forms.ChoiceField(label="ChoiceField", choices=CONTINENTS)
 	typedchoicefield = forms.TypedChoiceField(label="TypedChoiceField")
 	datefield = forms.DateField(label="DateField")
 	datetimefield = forms.DateTimeField(label="DateTimeField")
@@ -71,3 +71,8 @@ class ExampleModelForm(forms.ModelForm):
 	class Meta:
 		model = Friend
 		fields = ["first_name", "last_name", "gender", "age", "birthday", "country", "check", "friends"]
+
+
+	def __init__(self, *args, **kwargs):
+		super(__class__, self).__init__(*args, **kwargs)
+		self.fields["gender"].empty_label = "Who Knows?"

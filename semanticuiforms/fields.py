@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.forms.utils import flatatt
 
 from . import wrappers
-from .utils import valid_padding, get_choices
+from .utils import pad, get_choices
 
 
 def render_charfield(field, attrs):
@@ -36,10 +36,10 @@ def render_booleanfield(field, attrs):
 	"""
 	attrs.setdefault("_no_label", True)  # No normal label for booleanfields
 	attrs.setdefault("_inline", True)  # Checkbox should be inline
-	field.field.widget.attrs["class"] = "hidden"  # Hidden field
+	field.field.widget.attrs["style"] = "display:hidden"  # Hidden field
 
 	return wrappers.CHECKBOX_WRAPPER % {
-		"style": valid_padding(attrs.get("_style", "")),
+		"style": pad(attrs.get("_style", "")),
 		"field": field,
 		"label": format_html(
 			wrappers.LABEL_TEMPLATE, field.html_name, mark_safe(field.label)
@@ -57,13 +57,15 @@ def render_choicefield(field, attrs, choices=None):
 	if not choices:
 		choices = format_html_join("", wrappers.CHOICE_TEMPLATE, get_choices(field))
 
+	# Accessing the widget attrs directly saves them for a new use after
+	# a POST request
 	field.field.widget.attrs["value"] = field.value() or attrs.get("value", "")
 
 	return wrappers.DROPDOWN_WRAPPER % {
 		"name": field.html_name,
-		"attrs": valid_padding(flatatt(field.field.widget.attrs)),
+		"attrs": pad(flatatt(field.field.widget.attrs)),
 		"placeholder": attrs.get("placeholder", "Select"),
-		"style": valid_padding(attrs.get("_style", "")),
+		"style": pad(attrs.get("_style", "")),
 		"choices": choices
 	}
 
@@ -116,7 +118,7 @@ def render_multiplechoicefield(field, attrs, choices=None):
 		"field": field,
 		"choices": choices,
 		"placeholder": attrs.get("placeholder", "Select"),
-		"style": valid_padding(attrs.get("_style", "")),
+		"style": pad(attrs.get("_style", "")),
 	}
 
 
@@ -126,8 +128,8 @@ def render_datefield(field, attrs, style="date"):
 	"""
 	return wrappers.CALENDAR_WRAPPER % {
 		"field": field,
-		"style": valid_padding(style),
-		"align": valid_padding(attrs.get("_align", "")),
+		"style": pad(style),
+		"align": pad(attrs.get("_align", "")),
 		"icon": format_html(wrappers.ICON_TEMPLATE, attrs.get("_icon")),
 	}
 
@@ -158,7 +160,7 @@ def render_filefield(field, attrs):
 	return wrappers.FILE_WRAPPER % {
 		"field": field,
 		"id": "id_" + field.name,
-		"style": valid_padding(attrs.get("_style", "")),
+		"style": pad(attrs.get("_style", "")),
 		"text": escape(attrs.get("_text", "Select File")),
 		"icon": format_html(wrappers.ICON_TEMPLATE, attrs.get("_icon", "file outline"))
 	}
@@ -166,7 +168,7 @@ def render_filefield(field, attrs):
 
 FIELDS = {
 	# Generic Fields
-	"_": render_charfield,
+	None: render_charfield,
 
 	# Character Fields
 	"TextInput": render_charfield,
