@@ -15,7 +15,7 @@ class CharFieldTestCase(TestCase):
 		Set up testing environment.
 		"""
 		class Form(forms.Form):
-			charfield1 = forms.CharField()
+			charfield1 = forms.CharField(help_text="help me")
 			charfield2 = forms.CharField(widget=forms.TextInput(attrs={
 				"value": "Testing",
 				"_no_label": True
@@ -33,6 +33,7 @@ class CharFieldTestCase(TestCase):
 		self.assertTrue("required field" in html)
 		self.assertTrue("label" in html)
 		self.assertTrue("charfield" in html)
+		self.assertTrue("help me" in html)
 
 
 	def test_overrides(self):
