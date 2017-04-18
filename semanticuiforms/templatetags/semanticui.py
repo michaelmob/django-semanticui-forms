@@ -120,6 +120,7 @@ class Field():
 
 		if not self.attrs.get("_no_wrapper"):
 			self.set_label()
+			self.set_help()
 			self.set_errors()
 			self.set_classes()
 			self.set_icon()  # Must be the bottom-most setter
