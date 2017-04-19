@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
 	name="django-semanticui-forms",
-	version=str("1.6.0"),
+	version=str("1.6.1"),
 	description="Effortlessly style all of your Django forms and form fields with Semantic UI wrappers.",
 	author="Michael",
 	author_email="thetarkus@users.noreply.github.com",

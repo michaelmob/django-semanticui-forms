@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.forms.utils import flatatt
 
 from . import wrappers
-from .utils import pad, get_choices
+from .utils import pad, get_choices, get_placeholder_text
 
 
 def render_charfield(field, attrs):
@@ -64,7 +64,7 @@ def render_choicefield(field, attrs, choices=None):
 	return wrappers.DROPDOWN_WRAPPER % {
 		"name": field.html_name,
 		"attrs": pad(flatatt(field.field.widget.attrs)),
-		"placeholder": attrs.get("placeholder", "Select"),
+		"placeholder": attrs.get("placeholder") or get_placeholder_text(),
 		"style": pad(attrs.get("_style", "")),
 		"choices": choices
 	}
@@ -117,7 +117,7 @@ def render_multiplechoicefield(field, attrs, choices=None):
 		"name": field.html_name,
 		"field": field,
 		"choices": choices,
-		"placeholder": attrs.get("placeholder", "Select"),
+		"placeholder": attrs.get("placeholder") or get_placeholder_text(),
 		"style": pad(attrs.get("_style", "")),
 	}
 

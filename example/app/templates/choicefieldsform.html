@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static semanticui %}
+
+{% block page %}choicefieldsform{% endblock %}
+
+
+{% block content %}
+<h1>Choice Fields Form</h1>
+<form class="ui form" method="POST">
+	{% csrf_token %}
+	{% render_form form %}
+</form>
+{% endblock %}

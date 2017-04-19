@@ -54,7 +54,7 @@ class Field():
 	def set_help(self):
 		"""Set help text markup.
 		"""
-		if not self.field.help_text or self.attrs.get("_help"):
+		if not (self.field.help_text and self.attrs.get("_help")):
 			return
 
 		self.values["help"] = HELP_TEMPLATE.format(self.field.help_text)

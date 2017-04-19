@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import ManyFieldsExampleForm, ExampleModelForm, ExampleForm
+from .forms import ManyFieldsExampleForm, ExampleModelForm, ExampleForm, ExampleChoiceForm
 
 
 # Create your views here.
@@ -32,5 +32,16 @@ def example_manyfieldsform(request):
 		pass # Do whatever
 
 	return render(request, "manyfieldsform.html", {
+		"form": form
+	})
+
+
+def example_choicefieldsform(request):
+	form = ExampleChoiceForm(request.POST or None)
+
+	if request.POST and form.is_valid():
+		pass # Do whatever
+
+	return render(request, "choicefieldsform.html", {
 		"form": form
 	})

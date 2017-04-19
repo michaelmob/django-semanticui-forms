@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^form', example_form, name="form"),
     url(r'^modelform', example_modelform, name="modelform"),
     url(r'^manyfieldsform', example_manyfieldsform, name="manyfieldsform"),
+    url(r'^choicefieldsform', example_choicefieldsform, name="choicefieldsform"),
     
-    url(r'^', example_form, name="index"),
+    url(r'^$', example_form, name="index"),
 ]

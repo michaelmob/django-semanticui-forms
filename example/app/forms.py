@@ -1,5 +1,5 @@
 from django import forms
-from .models import Friend
+from .models import Friend, Choice
 
 
 CONTINENTS = (
@@ -23,6 +23,7 @@ class ManyFieldsExampleForm(forms.Form):
 	hiddeninput = forms.CharField(widget=forms.HiddenInput())
 	multiplehiddeninput = forms.MultipleChoiceField(widget=forms.MultipleHiddenInput, choices=CONTINENTS)
 	modelchoicefield = forms.ModelChoiceField(queryset=Friend.objects.all(), empty_label="Empty Space", to_field_name="first_name")
+	modelchoicefield2 = forms.ModelChoiceField(queryset=Friend.objects.all(), to_field_name="first_name")
 	modelmultiplechoicefield = forms.ModelMultipleChoiceField(queryset=Friend.objects.all())
 	booleanfield = forms.BooleanField(label="BooleanField")
 	charfield = forms.CharField(label="CharField")
@@ -76,3 +77,23 @@ class ExampleModelForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(__class__, self).__init__(*args, **kwargs)
 		self.fields["gender"].empty_label = "Who Knows?"
+
+
+
+class ExampleChoiceForm(forms.ModelForm):
+	class Meta:
+		model = Choice
+		exclude = []
+
+
+	def __init__(self, *args, **kwargs):
+		super(__class__, self).__init__(*args, **kwargs)
+		# `empty_label` instead of placeholder
+		self.fields["choices_1_2"].empty_label = "Who Knows?"
+
+		# changing the placeholder with no `empty_label`
+		self.fields["choices_1_1"].widget.attrs["placeholder"] = "Choose One"
+
+		# `empty_label` when there is an empty ("") choice
+		# this will not be set because there is already an empty choice
+		self.fields["choices_2_1"].empty_label = "Who Knows?"

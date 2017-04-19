@@ -14,9 +14,10 @@
 <body>
 	<nav class="ui top menu">
 		<div class="header item">Semantic UI Forms for Django</div>
-		<a href="{% url 'form' %}" class="item">Form</a>
-		<a href="{% url 'modelform' %}" class="item">Model Form</a>
-		<a href="{% url 'manyfieldsform' %}" class="item">Many Fields Form</a>
+		<a href="{% url 'form' %}" class="page-form item">Form</a>
+		<a href="{% url 'modelform' %}" class="page-modelform item">Model Form</a>
+		<a href="{% url 'manyfieldsform' %}" class="page-manyfieldsform item">Many Fields Form</a>
+		<a href="{% url 'choicefieldsform' %}" class="page-choicefieldsform item">Choice Fields Form</a>
 	</nav>
 
 	<main class="ui page container">
@@ -30,6 +31,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.js"></script>
 	<script src="{% static 'calendar.js' %}"></script>
 	<script>
+		$(".page-{% block page %}unknown{% endblock %}").addClass("active");
 		$(".ui.dropdown").dropdown();
 		$(".ui.form").form();
 		$(".ui.date.calendar").calendar({ type: "date" });

@@ -1,4 +1,12 @@
 from django.db.models.fields import BLANK_CHOICE_DASH
+from django.conf import settings
+
+
+def get_placeholder_text():
+	"""
+	Return default or developer specified placeholder text.
+	"""
+	return getattr(settings, "SUI_PLACEHOLDER_TEXT", "Select")
 
 
 def pad(value):
@@ -23,8 +31,9 @@ def get_choices(field):
 
 	Returns:
 		list: List of choices
-	"""
+	"""	
 	empty_label = getattr(field.field, "empty_label", False)
+	needs_empty_value = False
 	choices = []
 
 	# Data is the choices
@@ -37,14 +46,21 @@ def get_choices(field):
 		field_name = getattr(field.field, "to_field_name") or "pk"
 		choices += ((getattr(obj, field_name), str(obj)) for obj in queryset)
 
-	# Remove empty value when
-	# field is required and first choice's value is "---------"
-	if field.field.required and choices and choices[0][1] == BLANK_CHOICE_DASH[0][1]:
-		del choices[0]
+	# Determine if an empty value is needed
+	if choices and (choices[0][1] == BLANK_CHOICE_DASH[0][1] or choices[0][0]):
+		needs_empty_value = True
 
-	# Add empty value when
-	# has empty_label or (the fields not required and has a non-blank first choice)
-	if empty_label or (not field.field.required and choices and choices[0][0]):
-		choices.insert(0, ("", empty_label or BLANK_CHOICE_DASH[0][1]))
+		# Delete empty option
+		if not choices[0][0]:
+			del choices[0]
+
+	# Remove dashed empty choice
+	if empty_label == BLANK_CHOICE_DASH[0][1]:
+		empty_label = None
+
+	# Add custom empty value
+	if empty_label or not field.field.required:
+		if needs_empty_value:
+			choices.insert(0, ("", empty_label or BLANK_CHOICE_DASH[0][1]))
 
 	return choices

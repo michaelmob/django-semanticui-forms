@@ -75,7 +75,19 @@ optionally `_align` to your arguments.
 #### Override to render as different field
 Overriding the function that renders the field is done using the `_override`
 attribute. This is useful for things like using `CountrySelect` as it is
-not its own field type.
+not its own field type.  
+
+#### Override wrappers and settings
+Override wrappers by finding the wrapper variable name and prepending `SUI_` to it
+and inserting it into your `settings.py`.  
+```python
+SUI_ERROR_WRAPPER = "<div class=\"ui red pointing prompt label\">%(message)s</div>"
+```  
+
+You may also override the placeholder text.
+```python
+SUI_PLACEHOLDER_TEXT = "Select Option"
+```
 
 
 ### Special ChoiceFields
