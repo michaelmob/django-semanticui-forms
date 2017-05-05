@@ -68,6 +68,59 @@ class ExampleForm(forms.Form):
 
 
 
+class ExampleLayoutForm(forms.Form):
+	class Meta:
+		layout = [
+			("Text", "<h4 class=\"ui dividing header\">Personal Details</h4>"),
+			("Three Fields",
+				("Field", "first_name"),
+				("Field", "middle_initial"),
+				("Field", "last_name"),
+			),
+
+			("Text", "<h4 class=\"ui dividing header\">More Details</h4>"),
+			("Inline Fields",
+				("Field", "website"),
+				("Field", "email"),
+			),
+
+			("Text", "<h4 class=\"ui dividing header\">Complicated Details</h4>"),
+			("Four Fields",
+				("Field", "first_name"),
+				("Field", "middle_initial"),
+				("Field", "last_name"),
+				("Two Fields",
+					("Field", "username"),
+					("Field", "email"),
+				),
+			)
+		]
+
+
+	def __init__(self, *args, **kwargs):
+		super(__class__, self).__init__(*args, **kwargs)
+
+		placeholders = {
+			"first_name": "John",
+			"middle_initial": "C",
+			"last_name": "Smith",
+		}
+		
+		for key, value in placeholders.items():
+			self.fields[key].widget.attrs["placeholder"] = value
+
+
+	username = forms.CharField()
+	first_name = forms.CharField()
+	middle_initial = forms.CharField()
+	last_name = forms.CharField()
+	website = forms.CharField()
+	email = forms.EmailField()
+	phone_number = forms.CharField()
+	helpful = forms.BooleanField()
+
+
+
 class ExampleModelForm(forms.ModelForm):
 	class Meta:
 		model = Friend

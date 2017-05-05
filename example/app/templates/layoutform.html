@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static semanticui %}
+
+{% block page %}layoutform{% endblock %}
+
+
+{% block content %}
+<h1>Example Layout Form</h1>
+<form class="ui form" method="POST">
+	{% csrf_token %}
+	{% render_form form %}
+	<button class="ui submit button">Submit</button>
+</form>
+{% endblock %}

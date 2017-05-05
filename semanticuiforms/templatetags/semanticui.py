@@ -125,7 +125,7 @@ class Field():
 			self.set_classes()
 			self.set_icon()  # Must be the bottom-most setter
 
-		self.values["class"] = pad(" ".join(self.values["class"]))
+		self.values["class"] = pad(" ".join(self.values["class"])).lstrip()
 		result = mark_safe(FIELD_WRAPPER % self.values)
 		self.widget.attrs = self.attrs  # Re-assign variables
 		return result
@@ -143,26 +143,70 @@ def render_field(field, **kwargs):
 	Returns:
 		string: HTML code for field
 	"""
-	return Field(field, **kwargs).render()
+	if field:
+		return Field(field, **kwargs).render()
 
 
 @register.simple_tag()
-def render_form(formset, exclude=None, **kwargs):
+def render_form(form, exclude=None, **kwargs):
 	"""Render an entire form with Semantic UI wrappers for each field
 	
 	Args:
-		formset (formset): Django Form
+		form (form): Django Form
 		exclude (string): exclude fields by name, separated by commas
 		kwargs (dict): other attributes will be passed to fields
 	
 	Returns:
 		string: HTML of Django Form fields with Semantic UI wrappers
 	"""
+	if hasattr(form, "Meta") and hasattr(form.Meta, "layout"):
+		return render_layout_form(form, getattr(form.Meta, "layout"), **kwargs)
+
 	if exclude:
 		exclude = exclude.split(",")
 		for field in exclude:
-			formset.fields.pop(field)
+			form.fields.pop(field)
 
 	return mark_safe("".join([
-		render_field(field, **kwargs) for field in formset
+		render_field(field, **kwargs) for field in form
 	]))
+
+
+@register.simple_tag()
+def render_layout_form(form, layout=None, **kwargs):
+	"""Render an entire form with Semantic UI wrappers for each field with
+	a layout provided in the template or in the form class
+	
+	Args:
+		form (form): Django Form
+		layout (tuple): layout design
+		kwargs (dict): other attributes will be passed to fields
+	
+	Returns:
+		string: HTML of Django Form fields with Semantic UI wrappers
+	"""
+	def make_component(type_, *args):
+		"""Loop through tuples to make field wrappers for fields.
+		"""
+		if type_ == "Text":
+			return "".join(args)
+
+		elif type_ == "Field":
+			result = ""
+			for c in args:
+				if isinstance(c, tuple):
+					result += make_component(*c)
+				elif isinstance(c, str):
+					result += render_field(form.__getitem__(c), **kwargs)
+			return result
+		else:
+			if len(args) < 2:
+				return ""
+
+			result = "".join([make_component(*c) for c in args])
+			if type_:
+				return "<div class=\"%s\">%s</div>" % (type_.lower(), result)
+			else:
+				return result 
+
+	return mark_safe("".join([make_component(*component) for component in layout]))

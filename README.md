@@ -16,7 +16,7 @@ To render a form, it's as simple as `{% render_form my_form %}`
 It is possible to render each field individually allowing for more
 customization within the template. `{% render_field my_form.field %}`  
 
-### Attributes
+## Attributes
 #### Form Attributes  
 Form attributes given to the template tag that are not specified for internal
 use are passed onto each field.
@@ -72,25 +72,14 @@ optionally `_align` to your arguments.
 {% render_field my_form.field _icon='star' _align='left' %}
 ```
 
+## Custom/Overriding Fields
 #### Override to render as different field
 Overriding the function that renders the field is done using the `_override`
 attribute. This is useful for things like using `CountrySelect` as it is
 not its own field type.  
 
-#### Override wrappers and settings
-Override wrappers by finding the wrapper variable name and prepending `SUI_` to it
-and inserting it into your `settings.py`.  
-```python
-SUI_ERROR_WRAPPER = "<div class=\"ui red pointing prompt label\">%(message)s</div>"
-```  
 
-You may also override the placeholder text.
-```python
-SUI_PLACEHOLDER_TEXT = "Select Option"
-```
-
-
-### Special ChoiceFields
+### Custom ChoiceFields
 
 **CountrySelect**  
 `CountrySelect` from the `django-countries` package can be used to create a nice
@@ -114,8 +103,82 @@ choices = (
 {% render_field my_form.gender _override='IconSelect' %}
 ```
 
+## Layouts
+Using Semantic UI's form layout classes with <i>Semantic UI Forms for Django</i> is simple.  
+Within your form's Meta class, simply create a `layout` list. Within that list,
+create tuples with an function name as the first value, and the value as the second.  
 
-### Testing
+Functions names are as followed:
+* `Text` is for any text or HTML markup. Text in this is considered safe.
+* `Field`'s value must be the name of a field.
+* `[X] Fields` are containers. It's value must include `Field` items or more
+`[X] Field` items. `[X]` should be replaced, either by a number or a class.
+All items inside this will be wrapped with a `div` that has the class of the key.
+	* `Four Fields`
+	* `Six Fields`
+	* `Inline Fields`
+	* `Equal Width Fields`
+
+To set "wideness" of a specific field, you must add it to the `_field_class`
+attribute on your field. It cannot be done in the `layout`.
+
+```python
+class ExampleLayoutForm(forms.Form):
+	class Meta:
+		layout = [
+			("Text", "<h4 class=\"ui dividing header\">Personal Details</h4>"),
+			("Three Fields",
+				("Field", "first_name"),
+				("Field", "middle_initial"),
+				("Field", "last_name"),
+			),
+
+			("Text", "<h4 class=\"ui dividing header\">More Details</h4>"),
+			("Inline Fields",
+				("Field", "website"),
+				("Field", "email"),
+			),
+
+			("Text", "<h4 class=\"ui dividing header\">Complicated Details</h4>"),
+			("Four Fields",
+				("Field", "first_name"),
+				("Field", "middle_initial"),
+				("Field", "last_name"),
+				("Two Fields",
+					("Field", "username"),
+					("Field", "email"),
+				),
+			),
+            
+            ("Field", "helpful")
+		]
+
+
+	username = forms.CharField()
+	first_name = forms.CharField()
+	middle_initial = forms.CharField()
+	last_name = forms.CharField()
+	website = forms.CharField()
+	email = forms.EmailField()
+	phone_number = forms.CharField()
+	helpful = forms.BooleanField()
+```
+
+
+## Settings
+Override wrappers by finding the wrapper variable name and prepending `SUI_` to it
+and inserting it into your `settings.py`.  
+```python
+SUI_ERROR_WRAPPER = "<div class=\"ui red pointing prompt label\">%(message)s</div>"
+```   
+
+You can also change the default placeholder text.
+```python
+SUI_PLACEHOLDER_TEXT = "Select Option"
+```
+
+
+## Testing
 1. Create a virtual environment.  
 ```bash
 virtualenv -p $(which python3) .env

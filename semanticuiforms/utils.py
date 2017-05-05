@@ -2,13 +2,6 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 from django.conf import settings
 
 
-def get_placeholder_text():
-	"""
-	Return default or developer specified placeholder text.
-	"""
-	return getattr(settings, "SUI_PLACEHOLDER_TEXT", "Select")
-
-
 def pad(value):
 	"""
 	Add one space padding around value if value is valid.
@@ -20,6 +13,13 @@ def pad(value):
 		string: Value with padding if value was valid else one space
 	"""
 	return " %s " % value if value else " "
+
+
+def get_placeholder_text():
+	"""
+	Return default or developer specified placeholder text.
+	"""
+	return getattr(settings, "SUI_PLACEHOLDER_TEXT", "Select")
 
 
 def get_choices(field):
