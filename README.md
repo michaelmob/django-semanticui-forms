@@ -149,8 +149,8 @@ class ExampleLayoutForm(forms.Form):
 					("Field", "email"),
 				),
 			),
-            
-            ("Field", "helpful")
+
+			("Field", "helpful")
 		]
 
 
