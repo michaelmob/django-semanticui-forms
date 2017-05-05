@@ -177,6 +177,15 @@ You can also change the default placeholder text.
 SUI_PLACEHOLDER_TEXT = "Select Option"
 ```
 
+## Basic Semantic UI Validation Generator
+<i>Semantic UI Forms for Django</i> can generate a basic validation configuration for your form. The generator is very basic and does not have many features. It is only intended to give you a starting point.  
+
+View https://semantic-ui.com/behaviors/form.html for more details.
+
+```bash
+python manage.py semanticuivalidation app.forms.ExampleForm [--shorthand]
+```
+
 
 ## Testing
 1. Create a virtual environment.  
