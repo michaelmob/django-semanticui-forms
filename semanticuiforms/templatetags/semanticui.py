@@ -37,7 +37,7 @@ class Field():
 		"""Returns form input field of Field.
 		"""
 		name = self.attrs.get("_override", self.widget.__class__.__name__)
-		self.values["field"] = FIELDS.get(name, FIELDS.get(None))(self.field, self.attrs)
+		self.values["field"] = str(FIELDS.get(name, FIELDS.get(None))(self.field, self.attrs))
 
 
 	def set_label(self):
