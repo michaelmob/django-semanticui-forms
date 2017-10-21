@@ -10,11 +10,12 @@
 	{% csrf_token %}
 	{% render_field form.first_name _help=1 _icon='book' _align='left' value='Jane' placeholder='Put your first name here' %}
 	{% render_field form.last_name placeholder='Put your last name here' %}
-	{% render_field form.gender placeholder='Select Gender' %}
-	{% render_field form.age placeholder='21' disabled=1 %}
+	{% render_field form.gender placeholder='Select Gender' _dropdown_icon='search' %}
+	{% render_field form.age placeholder='21' %}
 	{% render_field form.birthday _icon='calendar' _align='left' placeholder='Your Birthday' value='05/26/1995' %}
 	{% render_field form.country _style='search' _override='CountrySelect' %}
 	{% render_field form.check _style='slider' %}
+	{% render_field form.friends %}
 	<button class="ui submit button">Submit</button>
 </form>
 {% endblock %}

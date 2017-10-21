@@ -15,7 +15,10 @@ class CharFieldTestCase(TestCase):
 		Set up testing environment.
 		"""
 		class Form(forms.Form):
-			charfield1 = forms.CharField(help_text="help me")
+			charfield1 = forms.CharField(
+				help_text="help me",
+				widget=forms.TextInput(attrs={"_help": True}
+			))
 			charfield2 = forms.CharField(widget=forms.TextInput(attrs={
 				"value": "Testing",
 				"_no_label": True

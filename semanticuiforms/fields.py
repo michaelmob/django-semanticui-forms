@@ -66,6 +66,7 @@ def render_choicefield(field, attrs, choices=None):
 		"attrs": pad(flatatt(field.field.widget.attrs)),
 		"placeholder": attrs.get("placeholder") or get_placeholder_text(),
 		"style": pad(attrs.get("_style", "")),
+		"icon": format_html(wrappers.ICON_TEMPLATE, attrs.get("_dropdown_icon") or "dropdown"),
 		"choices": choices
 	}
 
@@ -119,6 +120,7 @@ def render_multiplechoicefield(field, attrs, choices=None):
 		"choices": choices,
 		"placeholder": attrs.get("placeholder") or get_placeholder_text(),
 		"style": pad(attrs.get("_style", "")),
+		"icon": format_html(wrappers.ICON_TEMPLATE, attrs.get("_dropdown_icon") or "dropdown"),
 	}
 
 

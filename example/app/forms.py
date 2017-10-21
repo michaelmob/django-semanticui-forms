@@ -125,12 +125,21 @@ class ExampleModelForm(forms.ModelForm):
 	class Meta:
 		model = Friend
 		fields = ["first_name", "last_name", "gender", "age", "birthday", "country", "check", "friends"]
+		widgets={ 'gender': forms.TextInput(attrs={
+			"_style": "search multiple", "_override": "Select"
+		})}
 
 
 	def __init__(self, *args, **kwargs):
 		super(__class__, self).__init__(*args, **kwargs)
-		self.fields["gender"].empty_label = "Who Knows?"
-
+		from django.db.models import Value
+		from django.db.models.functions import Concat
+		self.fields["gender"]._choices = (
+			Friend.objects
+				.prefetch_related("friends")
+				.annotate(full_name=Concat("first_name", Value(" "), "last_name"))
+				.values_list("age", "full_name")
+		)
 
 
 class ExampleChoiceForm(forms.ModelForm):

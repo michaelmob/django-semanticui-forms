@@ -57,10 +57,11 @@ can be set in the form class or as an argument like above.
 * `_inline`: Adds inline class to field
 * `_field_class`: Allows for custom field classes
 * `_override`: Render as a different input type
-* `_style`: Stylize specific fields (BoleanField, ChoiceField)
+* `_style`: Stylize specific fields (BooleanField, ChoiceField)
     * `BooleanField`: set to 'toggle' or 'slider'
     * `ChoiceField`: set to 'search' or 'multiple' and more
 * `_icon`: Put icon on field
+* `_dropdown_icon`: Set dropdown icon for ChoiceFields, defaults to 'dropdown'
 * `_help`: Display `help_text` if available
 * `_align`: Used with `_icon`, which side icon is on; not required
 
@@ -94,9 +95,9 @@ field is useful since icons can be placed next to the values in the field.
 # Python
 # ("key", "value|icon")
 choices = (
-	("male", "Male|man"),
-	("female", "Female|woman"),
-	("other", "Other|genderless"),
+    ("male", "Male|man"),
+    ("female", "Female|woman"),
+    ("other", "Other|genderless"),
 )
 
 # Template
@@ -114,54 +115,54 @@ Functions names are as followed:
 * `[X] Fields` are containers. It's value must include `Field` items or more
 `[X] Field` items. `[X]` should be replaced, either by a number or a class.
 All items inside this will be wrapped with a `div` that has the class of the key.
-	* `Four Fields`
-	* `Six Fields`
-	* `Inline Fields`
-	* `Equal Width Fields`
+    * `Four Fields`
+    * `Six Fields`
+    * `Inline Fields`
+    * `Equal Width Fields`
 
 To set "wideness" of a specific field, you must add it to the `_field_class`
 attribute on your field. It cannot be done in the `layout`.
 
 ```python
 class ExampleLayoutForm(forms.Form):
-	class Meta:
-		layout = [
-			("Text", "<h4 class=\"ui dividing header\">Personal Details</h4>"),
-			("Three Fields",
-				("Field", "first_name"),
-				("Field", "middle_initial"),
-				("Field", "last_name"),
-			),
+    class Meta:
+        layout = [
+            ("Text", "<h4 class=\"ui dividing header\">Personal Details</h4>"),
+            ("Three Fields",
+                ("Field", "first_name"),
+                ("Field", "middle_initial"),
+                ("Field", "last_name"),
+            ),
 
-			("Text", "<h4 class=\"ui dividing header\">More Details</h4>"),
-			("Inline Fields",
-				("Field", "website"),
-				("Field", "email"),
-			),
+            ("Text", "<h4 class=\"ui dividing header\">More Details</h4>"),
+            ("Inline Fields",
+                ("Field", "website"),
+                ("Field", "email"),
+            ),
 
-			("Text", "<h4 class=\"ui dividing header\">Complicated Details</h4>"),
-			("Four Fields",
-				("Field", "first_name"),
-				("Field", "middle_initial"),
-				("Field", "last_name"),
-				("Two Fields",
-					("Field", "username"),
-					("Field", "email"),
-				),
-			),
+            ("Text", "<h4 class=\"ui dividing header\">Complicated Details</h4>"),
+            ("Four Fields",
+                ("Field", "first_name"),
+                ("Field", "middle_initial"),
+                ("Field", "last_name"),
+                ("Two Fields",
+                    ("Field", "username"),
+                    ("Field", "email"),
+                ),
+            ),
 
-			("Field", "helpful")
-		]
+            ("Field", "helpful")
+        ]
 
 
-	username = forms.CharField()
-	first_name = forms.CharField()
-	middle_initial = forms.CharField()
-	last_name = forms.CharField()
-	website = forms.CharField()
-	email = forms.EmailField()
-	phone_number = forms.CharField()
-	helpful = forms.BooleanField()
+    username = forms.CharField()
+    first_name = forms.CharField()
+    middle_initial = forms.CharField()
+    last_name = forms.CharField()
+    website = forms.CharField()
+    email = forms.EmailField()
+    phone_number = forms.CharField()
+    helpful = forms.BooleanField()
 ```
 
 
@@ -198,12 +199,12 @@ virtualenv -p $(which python3) .env
 source .env/bin/activate
 ```
 
-3. Set current directory to `examples` app and then install Python requirements.
+3. Set current directory to the `semanticuiforms` app and then install Python requirements.
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Make and run migrations for testing purposes.
+4. Inside of the `example` app, make and run migrations for testing purposes.
 ```bash
 python manage.py makemigrations 
 python manage.py migrate 

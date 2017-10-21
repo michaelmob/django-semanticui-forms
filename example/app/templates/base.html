@@ -33,7 +33,7 @@
 	<script src="{% static 'calendar.js' %}"></script>
 	<script>
 		$(".page-{% block page %}unknown{% endblock %}").addClass("active");
-		$(".ui.dropdown").dropdown();
+		$(".ui.dropdown").dropdown({allowAdditions: true});
 		$(".ui.form").form();
 		$(".ui.date.calendar").calendar({ type: "date" });
 		$(".ui.datetime.calendar").calendar({ type: "datetime" });

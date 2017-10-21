@@ -26,7 +26,7 @@ CHECKBOX_WRAPPER = getattr(settings, "SUI_CHECKBOX_WRAPPER", (
 DROPDOWN_WRAPPER = getattr(settings, "SUI_DROPDOWN_WRAPPER", (
 	"<div class=\"ui%(style)sselection dropdown\">"
 		"<input name=\"%(name)s\"%(attrs)stype=\"hidden\"></input>"
-		"<i class=\"dropdown icon\"></i>"
+		"%(icon)s"
 		"<div class=\"default text\">%(placeholder)s</div>"
 		"<div class=\"menu\">"
 			"%(choices)s"
@@ -37,7 +37,7 @@ DROPDOWN_WRAPPER = getattr(settings, "SUI_DROPDOWN_WRAPPER", (
 MULTIPLE_DROPDOWN_WRAPPER = getattr(settings, "SUI_MULTIPLE_DROPDOWN_WRAPPER", (
 	"<div class=\"ui%(style)smultiple selection dropdown\">"
 		"%(field)s"
-		"<i class=\"dropdown icon\"></i>"
+		"%(icon)s"
 		"<div class=\"default text\">%(placeholder)s</div>"
 		"<div class=\"menu\">"
 			"%(choices)s"

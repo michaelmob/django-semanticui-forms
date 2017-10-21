@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .forms import *
+from .models import Friend
 
 
 # Create your views here.
@@ -15,10 +16,18 @@ def example_form(request, template="form.html"):
 
 
 def example_modelform(request):
-	form = ExampleModelForm(request.POST or None)
+	obj = Friend.objects.filter(first_name="Jane").last()
+
+	form = ExampleModelForm(request.POST or None, instance=obj)
+
+	if obj:
+		print(type(obj.gender))
+		print(obj.gender)
 
 	if request.POST and form.is_valid():
-		pass # Do whatever
+		value = form.save()
+	else:
+		print(form.errors.as_data())
 
 	return render(request, "modelform.html", {
 		"form": form

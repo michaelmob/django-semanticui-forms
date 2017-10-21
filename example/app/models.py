@@ -35,7 +35,7 @@ CHOICES_2 = (
 class Friend(models.Model):
 	first_name = models.CharField(max_length=100, help_text="Your first name (model).")
 	last_name = models.CharField(max_length=100, null=True)
-	gender = models.CharField(max_length=100, choices=GENDERS, null=True)
+	gender = models.CharField(max_length=100, null=True) # choices=GENDERS, 
 	age = models.IntegerField(null=True)
 	birthday = models.DateField(null=True)
 	country = CountryField(null=True)

@@ -17,8 +17,8 @@ class ExampleAppConfig(AppConfig):
 
 		# Requires migrations, not necessary
 		try:
-			Friend.objects.get_or_create(first_name="A", age=18)
-			Friend.objects.get_or_create(first_name="B", age=18)
-			Friend.objects.get_or_create(first_name="C", age=18)
+			Friend.objects.get_or_create(first_name="Michael", last_name="1", age=22)
+			Friend.objects.get_or_create(first_name="Joe", last_name="2", age=21)
+			Friend.objects.get_or_create(first_name="Bill", last_name="3", age=20)
 		except:
 			pass
