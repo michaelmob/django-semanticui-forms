@@ -3,8 +3,12 @@ import json
 from django.core.management.base import BaseCommand, CommandError
 
 
+
 class Command(BaseCommand):
-	help = "Closes the specified poll for voting"
+	"""
+	Basic SemanticUI validation generator for Django forms.
+	"""
+	help = "Output SemanticUI validation for a form"
 
 	beginning_wrap = "$(\".ui.%s.form\").form({\n\tfields:"
 	ending_wrap = "});"
