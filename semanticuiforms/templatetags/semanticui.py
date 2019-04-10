@@ -108,6 +108,8 @@ class Field():
 		# Required class
 		if self.field.field.required and not self.attrs.get("_no_required"):
 			self.values["class"].append("required")
+		elif self.attrs.get("_required") and not self.field.field.required:
+			self.values["class"].append("required")
 
 
 	def render(self):

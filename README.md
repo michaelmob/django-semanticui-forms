@@ -53,6 +53,7 @@ can be set in the form class or as an argument like above.
 
 * `_no_label`: Do not show label
 * `_no_required`: Do not show required asterisk
+* `_required`: Do show required asterisk (assumes `_no_required` is absent)
 * `_no_errors`: Do not show inline errors
 * `_inline`: Adds inline class to field
 * `_field_class`: Allows for custom field classes
